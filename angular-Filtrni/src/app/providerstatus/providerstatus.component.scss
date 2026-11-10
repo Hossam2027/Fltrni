@@ -1,0 +1,244 @@
+/* ==============================
+   FLTRNI - PROVIDER STATUS PAGE
+================================ */
+
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.status-page {
+  min-height: calc(100vh - 75px);
+  padding: 48px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #f6f6f3;
+  box-sizing: border-box;
+  direction: rtl;
+  font-family: inherit;
+}
+
+.status-card {
+  width: 100%;
+  max-width: 680px;
+  padding: 38px;
+  background: #ffffff;
+  border: 1px solid #eaeae5;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.055);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Header */
+
+.status-card > h2 {
+  margin: 0 0 12px;
+  color: #171717;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.subtitle {
+  margin: 0 0 30px;
+  color: #777777;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+/* Status messages */
+
+.status-message,
+.no-request {
+  padding: 30px 24px;
+  border-radius: 15px;
+  border: 1px solid #eeeeea;
+  background: #fafaf8;
+}
+
+.status-message h3,
+.no-request h3 {
+  margin: 16px 0 10px;
+  color: #202020;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.status-message p,
+.no-request p {
+  margin: 8px 0;
+  color: #686868;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+/* Icon */
+
+.status-icon {
+  width: 66px;
+  height: 66px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff0ad;
+  color: #24200d;
+  font-size: 29px;
+  font-weight: 800;
+}
+
+/* Pending */
+
+.status-message.pending {
+  background: #fffdf4;
+  border-color: #f0df96;
+  border-top: 4px solid #f4c928;
+}
+
+.pending .status-icon {
+  background: #ffed9b;
+  color: #5c4700;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Approved */
+
+.status-message.approved {
+  background: #f4fbf5;
+  border-color: #d8eadb;
+  border-top: 4px solid #32965b;
+}
+
+.approved .status-icon {
+  background: #d9f2df;
+  color: #237a43;
+}
+
+/* Rejected / Error */
+
+.status-message.rejected {
+  background: #fff6f5;
+  border-color: #f0d8d5;
+  border-top: 4px solid #d94b42;
+}
+
+.rejected .status-icon {
+  background: #ffe2df;
+  color: #bd342b;
+}
+
+/* Application number */
+
+.status-message p:last-child {
+  margin-top: 18px;
+  color: #343434;
+  font-weight: 700;
+}
+
+/* No application */
+
+.no-request {
+  background: #fafaf8;
+  border-style: dashed;
+  border-color: #deded5;
+}
+
+.no-request .status-icon {
+  background: #fff0ad;
+  color: #24200d;
+}
+
+/* Apply button */
+
+.apply-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  margin-top: 22px;
+  padding: 0 25px;
+  border-radius: 9px;
+  background: #f4cc32;
+  color: #171717;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid #e6bd22;
+  transition: background 0.2s ease, transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.apply-button:hover {
+  background: #ffdb45;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(210, 171, 21, 0.2);
+}
+
+/* Loading animation */
+
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(244, 201, 40, 0.28);
+  }
+
+  50% {
+    box-shadow: 0 0 0 9px rgba(244, 201, 40, 0);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .status-page {
+    min-height: calc(100vh - 65px);
+    padding: 25px 14px;
+  }
+
+  .status-card {
+    padding: 25px 17px;
+    border-radius: 15px;
+  }
+
+  .status-card > h2 {
+    font-size: 23px;
+  }
+
+  .subtitle {
+    margin-bottom: 23px;
+    font-size: 13px;
+  }
+
+  .status-message,
+  .no-request {
+    padding: 25px 15px;
+  }
+
+  .status-message h3,
+  .no-request h3 {
+    font-size: 19px;
+  }
+
+  .status-icon {
+    width: 58px;
+    height: 58px;
+    font-size: 25px;
+  }
+
+  .apply-button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pending .status-icon {
+    animation: none;
+  }
+
+  .apply-button {
+    transition: none;
+  }
+}

@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Fltrni.core/Fltrni.core.csproj" />
+    <Project Path="Fltrni.infrastructure/Fltrni.infrastructure.csproj" />
+    <Project Path="Fltrni/Fltrni.API.csproj" />
+  </Folder>
+</Solution>

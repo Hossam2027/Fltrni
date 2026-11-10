@@ -1,0 +1,61 @@
+
+<div class="admin-page container py-5">
+
+  <div class="admin-header mb-4">
+    <div>
+      <span class="admin-label">ADMINISTRATION</span>
+      <h1>Service Provider Requests</h1>
+      <p>Review and manage pending service providers.</p>
+    </div>
+
+    <div class="pending-count">
+      <span>{{ pendingProviders.length }}</span>
+      <small>Pending requests</small>
+    </div>
+  </div>
+
+    <div class="provider-card" *ngFor="let provider of pendingProviders">
+
+      <div class="provider-info">
+        <div class="provider-avatar">
+          {{ provider.name.charAt(0).toUpperCase() }}
+        </div>
+
+        <div class="provider-details">
+          <h3>{{ provider.name }}</h3>
+
+          <p>
+            {{ provider.categoryName || 'Service provider' }}
+          </p>
+
+          <div class="provider-meta">
+            <span>{{ provider.governorate }}</span>
+            <span *ngIf="provider.area">· {{ provider.area }}</span>
+          </div>
+
+          <p class="provider-price">
+            Starting price:
+            <strong>{{ provider.startingPrice }}</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="provider-actions">
+        <button 
+          type="button"
+          class="btn-approve"
+          (click)="approveProvider(provider.id)">
+          Approve
+        </button>
+
+        <button
+          type="button"
+          class="btn-reject"
+          (click)="rejectProvider(provider.id)">
+          Reject
+        </button>
+      </div>
+
+    </div>
+  </div>
+

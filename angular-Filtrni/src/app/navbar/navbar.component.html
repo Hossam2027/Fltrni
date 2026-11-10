@@ -1,0 +1,220 @@
+ <nav class="fltrni-navbar">
+  <div class="navbar-container">
+
+    <!-- Brand -->
+    <a class="brand" routerLink="/home" (click)="closeMenu()">
+      <span class="brand-icon">F</span>
+      <span class="brand-name">Fltrni<span class="brand-dot">.</span></span>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button
+      class="menu-toggle"
+      type="button"
+      [class.open]="isMenuOpen"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation"
+      (click)="toggleMenu()">
+
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <div class="navbar-menu" [class.open]="isMenuOpen">
+
+      <!-- Navigation Links -->
+      <div class="nav-links">
+
+        <!-- Explore Services -->
+        <a
+          class="nav-link-item"
+          routerLink="/serviceprovider"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()">
+
+          <span class="nav-symbol">⌂</span>
+          <span>{{ 'NAV.EXPLORE_SERVICES' | translate }}</span>
+        </a>
+
+        <!-- Search Toolbar: Service Providers Page Only -->
+        <div class="search-toolbar" *ngIf="isServiceProviderPage">
+
+          <form class="search-form" (ngSubmit)="onSearch()">
+
+            <span class="search-symbol">⌕</span>
+
+            <input
+              type="search"
+              [(ngModel)]="search"
+              name="search"
+              [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
+              [attr.aria-label]="'NAV.SEARCH_PLACEHOLDER' | translate">
+
+            <button type="submit" class="btn-search">
+              {{ 'NAV.SEARCH' | translate }}
+            </button>
+
+          </form>
+
+          <!-- Add Service -->
+          <a
+            *ngIf="authService.isLoggedIn()"
+            class="btn-add-service"
+            routerLink="/addserviceprovider"
+            routerLinkActive="active"
+            (click)="closeMenu()">
+
+            <span class="add-symbol">+</span>
+            {{ 'NAV.ADD_SERVICE' | translate }}
+          </a>
+
+        </div>
+
+        <!-- Admin Dashboard -->
+        <a
+          *ngIf="authService.isLoggedIn() && hasRole('Admin')"
+          
+          class="nav-link-item"
+          routerLink="/admin"
+          routerLinkActive="active"
+          (click)="closeMenu()">
+
+          <span class="nav-symbol">▦</span>
+          <span>{{ 'NAV.DASHBOARD' | translate }}</span>
+        </a>
+
+      </div>
+
+      <!-- Account Actions -->
+      <div class="nav-actions">
+
+        <!-- Provider Status -->
+        <button
+          *ngIf="authService.isLoggedIn() && showProviderStatusButton"
+          type="button"
+          class="provider-status-btn"
+          (click)="goToProviderStatus()">
+
+          <span class="status-dot"></span>
+          {{ 'NAV.SERVICE_STATUS' | translate }}
+        </button>
+
+        <!-- Guest Actions -->
+        <ng-container *ngIf="!authService.isLoggedIn(); else loggedIn">
+
+          <a
+            class="login-link"
+            routerLink="/login"
+            (click)="closeMenu()">
+
+            {{ 'NAV.LOGIN' | translate }}
+          </a>
+
+          <a
+            class="register-btn"
+            routerLink="/register"
+            (click)="closeMenu()">
+
+            {{ 'NAV.REGISTER' | translate }}
+            <span>→</span>
+          </a>
+
+        </ng-container>
+
+        <!-- Logged-in Actions -->
+        <ng-template #loggedIn>
+
+          <div *ngIf="userName" class="user-chip">
+
+            <span class="avatar">
+              {{ userName.charAt(0) | uppercase }}
+            </span>
+
+            <span class="user-text">
+              <small>{{ 'NAV.WELCOME' | translate }}</small>
+              <strong>{{ userName }}</strong>
+            </span>
+
+          </div>
+
+          <button
+            type="button"
+            class="logout-btn"
+            (click)="logout()">
+
+            {{ 'NAV.LOGOUT' | translate }}
+            <span class="logout-symbol">↗</span>
+          </button>
+
+        </ng-template>
+
+        <!-- Language Toggle -->
+   <!-- Amazon-style Language Selector -->
+
+<div class="language-menu">
+
+  <button
+    type="button"
+    class="language-trigger"
+    aria-label="Choose language"
+    [attr.aria-expanded]="languageMenuOpen"
+    (click)="languageMenuOpen = !languageMenuOpen">
+
+    <span class="language-code">
+      {{ languageService.currentLang === 'ar' ? 'عربي' : 'EN' }}
+    </span>
+
+    <span class="language-chevron">▼</span>
+  </button>
+
+  <div class="language-panel" *ngIf="languageMenuOpen">
+
+    <div class="language-panel-title">
+      {{ languageService.currentLang === 'ar'
+          ? 'اختار اللغة'
+          : 'Choose your language' }}
+    </div>
+
+    <button
+      type="button"
+      class="language-item"
+      [class.selected]="languageService.currentLang === 'en'"
+      (click)="setLanguage('en'); languageMenuOpen = false">
+
+      <span>English</span>
+
+      <span class="language-check">
+        {{ languageService.currentLang === 'en' ? '✓' : '' }}
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="language-item"
+      [class.selected]="languageService.currentLang === 'ar'"
+      (click)="setLanguage('ar'); languageMenuOpen = false">
+
+      <span>العربية</span>
+
+      <span class="language-check">
+        {{ languageService.currentLang === 'ar' ? '✓' : '' }}
+      </span>
+    </button>
+
+  </div>
+</div>
+
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<p>Logged In: {{ authService.isLoggedIn() }}</p>
+
+<p>User Role: {{ authService.getUserRole() }}</p>
+
+<p>Is Admin: {{ hasRole('Admin') }}</p>

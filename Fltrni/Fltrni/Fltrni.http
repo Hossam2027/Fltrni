@@ -1,0 +1,6 @@
+@Fltrni_HostAddress = http://localhost:5117
+
+GET {{Fltrni_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

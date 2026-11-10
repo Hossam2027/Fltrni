@@ -1,0 +1,370 @@
+
+<main class="page">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="filters">
+
+      <header class="filters-head">
+        <h2>{{ 'PROVIDERS.FILTERS' | translate }}</h2>
+
+        <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16M7 12h10M10 18h4"></path>
+        </svg>
+
+        
+      </header>
+
+      <!-- Find Nearest -->
+      <button
+        type="button"
+        class="btn btn-nearest-filter"
+        [disabled]="nearestLoading"
+        (click)="getNearestProvider()">
+
+        <span *ngIf="nearestLoading" class="loading-spinner"></span>
+
+        <svg *ngIf="!nearestLoading" class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m3 11 18-8-8 18-2-8-8-2Z"></path>
+        </svg>
+
+        <span>
+          {{ (nearestLoading ? 'PROVIDERS.FINDING_NEAREST' : 'PROVIDERS.FIND_NEAREST') | translate }}
+        </span>
+      </button>
+
+      <!-- Location Status -->
+      <p class="location-status" *ngIf="locationLoading">
+        {{ 'PROVIDERS.GETTING_LOCATION' | translate }}
+      </p>
+
+      <p class="error-message" *ngIf="locationError">
+        {{ locationError }}
+        <button
+          type="button"
+          class="retry-location"
+          (click)="getUserLocation()">
+          {{ 'PROVIDERS.TRY_AGAIN' | translate }}
+        </button>
+      </p>
+
+      <p class="error-message" *ngIf="nearestError">
+        {{ nearestError }}
+      </p>
+
+      <!-- Filters Form -->
+      <form (ngSubmit)="resetPagination(); getallServiceProviders()">
+
+        <div class="field">
+          <label for="categoryId">
+            {{ 'PROVIDERS.SERVICE_CATEGORY' | translate }}
+          </label>
+
+          <select
+            id="categoryId"
+            name="categoryId"
+            [(ngModel)]="categoryId"
+            (ngModelChange)="onCategoryChange()">
+
+            <option [ngValue]="0">
+              {{ 'PROVIDERS.ALL_CATEGORIES' | translate }}
+            </option>
+
+            <option *ngFor="let category of categories" [ngValue]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="governorate">
+            {{ 'PROVIDERS.GOVERNORATE' | translate }}
+          </label>
+
+          <select
+            id="governorate"
+            name="governorate"
+            [(ngModel)]="governorate"
+            (ngModelChange)="onGovernorateChange()">
+
+            <option value="">
+              {{ 'PROVIDERS.ALL_GOVERNORATES' | translate }}
+            </option>
+
+            <option *ngFor="let item of governorates" [value]="item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="area">
+            {{ 'PROVIDERS.AREA_CITY' | translate }}
+          </label>
+
+          <select
+            id="area"
+            name="area"
+            [(ngModel)]="area"
+            (ngModelChange)="resetPagination(); getallServiceProviders()">
+
+            <option value="">
+              {{ 'PROVIDERS.ALL_AREAS' | translate }}
+            </option>
+
+            <option *ngFor="let item of areas" [value]="item">
+              {{ item }}
+            </option>
+          </select>
+        </div>
+
+        <button type="button" class="btn btn-ghost btn-reset" (click)="resetFilters()">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+
+          {{ 'PROVIDERS.RESET_FILTERS' | translate }}
+        </button>
+      </form>
+
+      <div class="sidebar-footer">
+        <span class="footer-dot"></span>
+      </div>
+
+    </aside>
+
+    <!-- RESULTS -->
+    <section class="results">
+
+      <!-- Toolbar -->
+      <div class="results-toolbar">
+
+        <div class="results-count">
+          <div class="count-number">
+            {{ totalCount }}
+            {{ 'PROVIDERS.PROVIDERS_COUNT' | translate }}
+          </div>
+
+            <!-- Results Summary -->
+      <p class="pagination-summary" *ngIf="totalCount > 0">
+        Showing
+        {{ (currentPage - 1) * pageSize + 1 }}
+        –
+        {{ (currentPage - 1) * pageSize + paginatedProviders.length }}
+        of {{ totalCount }} providers
+      </p>
+        </div>
+
+        <!-- Sort -->
+        <div class="sort-control">
+          <label for="sortBy">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M7 12h10M10 17h4"></path>
+            </svg>
+
+            {{ 'PROVIDERS.SORT_BY' | translate }}
+          </label>
+
+          <select id="sortBy" name="sortBy" [(ngModel)]="sortBy">
+            <option value="recommended">{{ 'PROVIDERS.RECOMMENDED' | translate }}</option>
+            <option value="distance">{{ 'PROVIDERS.NEAREST_FIRST' | translate }}</option>
+            <option value="rating">{{ 'PROVIDERS.HIGHEST_RATING' | translate }}</option>
+            <option value="priceLow">{{ 'PROVIDERS.PRICE_LOW_HIGH' | translate }}</option>
+            <option value="priceHigh">{{ 'PROVIDERS.PRICE_HIGH_LOW' | translate }}</option>
+            <option value="name">{{ 'PROVIDERS.NAME_A_Z' | translate }}</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Provider Cards -->
+      <div class="grid" *ngIf="paginatedProviders.length > 0; else noProviders">
+
+        <article class="card" *ngFor="let provider of paginatedProviders">
+
+          <!-- Card Header -->
+          <div class="card-top">
+
+            <div class="avatar">
+              {{ (provider.name || '?').charAt(0).toUpperCase() }}
+            </div>
+
+            <div class="identity">
+              <h3>{{ provider.name }}</h3>
+
+              <span class="badge">
+                {{ provider.categoryName || ('PROVIDERS.SERVICE_PROVIDER' | translate) }}
+              </span>
+            </div>
+
+            <div class="rating" [attr.title]="'PROVIDERS.CUSTOMER_RATING' | translate">
+              <svg class="icon star" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z"></path>
+              </svg>
+
+              <span>{{ provider.rating | number:'1.1-1' }}</span>
+            </div>
+
+          </div>
+
+          <!-- Provider Information -->
+          <ul class="info">
+
+            <li class="info-row">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path>
+                <circle cx="12" cy="10" r="2.5"></circle>
+              </svg>
+
+              <span>
+                {{ provider.area || ('PROVIDERS.AREA_NOT_SPECIFIED' | translate) }}
+                <ng-container *ngIf="provider.governorate">
+                  , {{ provider.governorate }}
+                </ng-container>
+              </span>
+            </li>
+
+            <!-- Distance -->
+            <li class="info-row distance" *ngIf="$any(provider).distance != null">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m3 11 18-8-8 18-2-8-8-2Z"></path>
+              </svg>
+
+              <span>
+                <strong>
+                  {{ $any(provider).distance | number:'1.1-2' }}
+                  {{ 'PROVIDERS.KM' | translate }}
+                </strong>
+                {{ 'PROVIDERS.AWAY_FROM_YOU' | translate }}
+              </span>
+            </li>
+
+            <li
+              class="info-row distance-unavailable"
+              *ngIf="userLatitude !== null && $any(provider).distance == null">
+              <span>{{ 'PROVIDERS.DISTANCE_UNAVAILABLE' | translate }}</span>
+            </li>
+
+          </ul>
+
+          <!-- Price and Reviews -->
+          <div class="stats">
+
+            <div class="stat">
+              <span class="stat-label">
+                {{ 'PROVIDERS.STARTING_PRICE' | translate }}
+              </span>
+
+              <div class="stat-value">
+                {{ provider.startingPrice | number:'1.0-2' }}
+                <small>{{ 'PROVIDERS.CURRENCY' | translate }}</small>
+              </div>
+            </div>
+
+            <div class="stat stat-end">
+              <span class="stat-label">
+                {{ 'PROVIDERS.CUSTOMER_REVIEWS' | translate }}
+              </span>
+
+              <div class="stat-value">
+                {{ provider.reviewsCount }}
+                <small>{{ 'PROVIDERS.REVIEWS' | translate }}</small>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Actions -->
+          <div class="actions">
+
+            <a
+              *ngIf="provider.googleMapsUrl"
+              [href]="provider.googleMapsUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-soft"
+              [attr.aria-label]="'PROVIDERS.VIEW_LOCATION' | translate">
+
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path>
+                <circle cx="12" cy="10" r="2.5"></circle>
+              </svg>
+
+              {{ 'PROVIDERS.LOCATION' | translate }}
+            </a>
+
+            <a [routerLink]="['/providerdetails', provider.id]" class="btn btn-primary btn-profile">
+              {{ 'PROVIDERS.VIEW_PROFILE' | translate }}
+
+              <svg class="icon arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </a>
+
+          </div>
+
+        </article>
+      </div>
+
+      <!-- Pagination -->
+      <nav
+        class="pagination"
+        *ngIf="totalPages > 1"
+        aria-label="Provider pagination">
+
+        <button
+          type="button"
+          class="page-btn"
+          [disabled]="currentPage <= 1"
+          (click)="goToPage(currentPage - 1)">
+          Previous
+        </button>
+
+        <button
+          type="button"
+          class="page-btn"
+          *ngFor="let page of pageNumbers"
+          [class.active]="currentPage === page"
+          [attr.aria-current]="currentPage === page ? 'page' : null"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <button
+          type="button"
+          class="page-btn"
+          [disabled]="currentPage >= totalPages"
+          (click)="goToPage(currentPage + 1)">
+          Next
+        </button>
+
+      </nav>
+
+    
+
+      <!-- Empty State -->
+      <ng-template #noProviders>
+        <div class="empty">
+
+          <div class="empty-icon">
+            <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </div>
+
+          <h3>{{ 'PROVIDERS.NO_PROFESSIONALS' | translate }}</h3>
+
+          <p>{{ 'PROVIDERS.NO_PROFESSIONALS_HINT' | translate }}</p>
+
+          <button type="button" class="btn btn-primary" (click)="resetFilters()">
+            {{ 'PROVIDERS.CLEAR_FILTERS' | translate }}
+          </button>
+
+        </div>
+      </ng-template>
+
+    </section>
+  </div>
+</main>

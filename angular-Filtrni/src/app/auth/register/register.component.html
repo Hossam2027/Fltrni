@@ -1,0 +1,113 @@
+<div class="register-page">
+  <div class="register-card">
+
+    <!-- Brand -->
+    <a class="brand" routerLink="/">
+      <span class="brand-icon">F</span>
+      <span>Fltrni<span class="brand-dot">.</span></span>
+    </a>
+
+    <!-- Heading -->
+    <div class="register-heading">
+      <h1>Create Account</h1>
+      <p>Join Fltrni and get started today</p>
+    </div>
+
+    <form [formGroup]="registerform"
+          (ngSubmit)="register()" >
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Enter your full name"
+          autocomplete="name"
+        />
+
+        <div class="error-message"
+             *ngIf="registerform.get('name')?.touched &&
+                    registerform.get('name')?.invalid">
+          <small *ngIf="registerform.get('name')?.errors?.['required']">
+            Name is required.
+          </small>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email address"
+          autocomplete="email"
+          />
+
+        <div class="error-message"
+             *ngIf="registerform.get('email')?.touched &&
+                    registerform.get('email')?.invalid">
+
+          <small *ngIf="registerform.get('email')?.errors?.['required']">
+            Email is required.
+          </small>
+
+          <small *ngIf="registerform.get('email')?.errors?.['email']">
+            Enter a valid email address.
+          </small>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+           />
+
+        <div class="error-message"
+             *ngIf="registerform.get('password')?.touched &&
+                    registerform.get('password')?.invalid">
+
+          <small *ngIf="registerform.get('password')?.errors?.['required']">
+            Password is required.
+          </small>
+
+          <small *ngIf="registerform.get('password')?.errors?.['minlength']">
+            Password must contain at least
+            {{ registerform.get('password')?.errors?.['minlength']?.requiredLength }}
+            characters.
+          </small>
+        </div>
+      </div>
+
+      
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="register-button"
+       >
+Register
+      </button>
+
+    </form>
+
+    <!-- Login link -->
+    <div class="login-link">
+      <span>Already have an account?</span>
+      <a routerLink="/login">Login</a>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,69 @@
+
+<main class="home-page">
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <!-- Eyebrow -->
+      <div class="eyebrow">
+        <span class="status-dot"></span>
+        {{ 'HOME.EYEBROW' | translate }}
+      </div>
+
+      <!-- Hero Actions -->
+      <div class="hero-actions">
+
+        <a routerLink="/serviceprovider" class="btn btn-primary">
+          {{ 'HOME.FIND_PROFESSIONAL' | translate }}
+          <span class="arrow">↗</span>
+        </a>
+
+        <a routerLink="/register" class="btn btn-secondary">
+          {{ 'HOME.JOIN_PROVIDER' | translate }}
+        </a>
+
+      </div>
+
+      <!-- Hero Note -->
+      <div class="hero-note">
+        <span class="note-line"></span>
+        <span>{{ 'HOME.HERO_NOTE' | translate }}</span>
+      </div>
+
+    </div>
+
+    <!-- Hero Visual -->
+    <div class="hero-visual">
+
+      <div class="glow"></div>
+
+      <div class="orbit orbit-outer"></div>
+      <div class="orbit orbit-middle"></div>
+      <div class="orbit orbit-inner"></div>
+
+      <div class="center-logo">F<span>.</span></div>
+
+      <div class="service-icon icon-one">🔨</div>
+      <div class="service-icon icon-two">⚡</div>
+      <div class="service-icon icon-three">🛠️</div>
+      <div class="service-icon icon-four">🏠</div>
+
+      <div class="info-card card-top">
+        <span class="card-symbol">✦</span>
+        <div>
+          <strong>{{ 'HOME.TRUSTED_PROFESSIONALS' | translate }}</strong>
+          <small>{{ 'HOME.RIGHT_MATCH' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="info-card card-bottom">
+        <span class="check-icon">✓</span>
+        <div>
+          <small>{{ 'HOME.NEXT_SOLUTION' | translate }}</small>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+</main>

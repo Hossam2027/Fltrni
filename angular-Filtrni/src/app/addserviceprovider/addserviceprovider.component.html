@@ -1,0 +1,444 @@
+
+<main class="provider-page">
+  <div class="form-container">
+
+    <!-- Header -->
+    <header class="form-header">
+      <div class="header-top">
+        <span class="header-icon">
+          <i class="bi bi-tools"></i>
+        </span>
+
+        <span class="eyebrow">FLTRNI SERVICES</span>
+      </div>
+
+      <h1>{{ 'ADD_SERVICE.TITLE' | translate }}</h1>
+
+      <p class="header-description">
+        {{ 'ADD_SERVICE.DESCRIPTION' | translate }}
+      </p>
+
+      <div class="header-badge">
+        <span class="status-dot"></span>
+        {{ 'ADD_SERVICE.REGISTRATION_BADGE' | translate }}
+      </div>
+    </header>
+
+    <div class="form-divider"></div>
+
+    <form
+      #providerForm="ngForm"
+      (ngSubmit)="addServiceProvider()">
+
+      <!-- 01 Personal Information -->
+      <section class="form-section">
+        <div class="section-heading">
+          <span class="section-number">01</span>
+
+          <div class="section-title">
+            <h2>{{ 'ADD_SERVICE.PERSONAL_INFORMATION' | translate }}</h2>
+            <p>{{ 'ADD_SERVICE.CONTACT_DETAILS' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Full Name -->
+          <div class="field">
+            <label for="name">
+              {{ 'ADD_SERVICE.FULL_NAME' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              name="name"
+              [(ngModel)]="createProvider.name"
+              [placeholder]="'ADD_SERVICE.FULL_NAME_PLACEHOLDER' | translate"
+              autocomplete="name"
+              required
+              #name="ngModel">
+
+            <small
+              class="error"
+              *ngIf="name.invalid && name.touched">
+              {{ 'ADD_SERVICE.NAME_REQUIRED' | translate }}
+            </small>
+          </div>
+
+          <!-- Phone -->
+          <div class="field">
+            <label for="phone">
+              {{ 'ADD_SERVICE.PHONE_NUMBER' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="phone"
+              type="tel"
+              name="phone"
+              [(ngModel)]="createProvider.phone"
+              [placeholder]="'ADD_SERVICE.PHONE_PLACEHOLDER' | translate"
+              autocomplete="tel"
+              required
+              #phone="ngModel">
+
+            <small
+              class="error"
+              *ngIf="phone.invalid && phone.touched">
+              {{ 'ADD_SERVICE.PHONE_REQUIRED' | translate }}
+            </small>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- 02 Location Information -->
+      <section class="form-section">
+        <div class="section-heading">
+          <span class="section-number">02</span>
+
+          <div class="section-title">
+            <h2>{{ 'ADD_SERVICE.LOCATION_INFORMATION' | translate }}</h2>
+            <p>{{ 'ADD_SERVICE.LOCATION_DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Governorate
+          <div class="field">
+            <label for="governorate">
+              {{ 'ADD_SERVICE.GOVERNORATE' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="governorate"
+              type="text"
+              name="governorate"
+              [(ngModel)]="createProvider.governorate"
+              [placeholder]="'ADD_SERVICE.GOVERNORATE_PLACEHOLDER' | translate"
+              required
+              #governorate="ngModel">
+
+            <small
+              class="error"
+              *ngIf="governorate.invalid && governorate.touched">
+              {{ 'ADD_SERVICE.GOVERNORATE_REQUIRED' | translate }}
+            </small>
+          </div> -->
+
+<!-- Governorate -->
+<div class="field">
+  <label for="governorate">
+    {{ 'ADD_SERVICE.GOVERNORATE' | translate }}
+    <span class="required">*</span>
+  </label>
+
+  <select
+    id="governorate"
+    name="governorate"
+    [(ngModel)]="createProvider.governorate"
+    required
+    #governorate="ngModel">
+
+    <option value="" disabled>
+      {{ 'ADD_SERVICE.GOVERNORATE_PLACEHOLDER' | translate }}
+    </option>
+
+    <option value="Cairo">Cairo</option>
+    <option value="Giza">Giza </option>
+    <option value="Alexandria">Alex</option>
+    <option value="Qalyubia">Qalyubia</option>
+    <option value="Beheira">Beheira</option>
+    <option value="Matrouh">Matrouh</option>
+    <option value="Damietta">Damietta</option>
+    <option value="Dakahlia">Dakahlia</option>
+    <option value="Sharqia">Sharqia</option>
+    <option value="Gharbia">Gharbia</option>
+    <option value="Monufia">Monufia</option>
+    <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+    <option value="Fayoum">Fayoum</option>
+    <option value="Beni Suef">Beni Suef</option>
+    <option value="Minya">Minya</option>
+    <option value="Asyut">Asyut</option>
+    <option value="Sohag">Sohag</option>
+    <option value="Qena">Qena</option>
+    <option value="Luxor">Luxor</option>
+    <option value="Aswan">Aswan</option>
+    <option value="Red Sea">Red Sea</option>
+    <option value="New Valley">New Valley</option>
+    <option value="North Sinai">North Sinai</option>
+    <option value="South Sinai">South Sinai</option>
+    <option value="Port Said">Port Said</option>
+    <option value="Ismailia">Ismailia</option>
+    <option value="Suez">Suez</option>
+  </select>
+
+  <small
+    class="error"
+    *ngIf="governorate.invalid && governorate.touched">
+    {{ 'ADD_SERVICE.GOVERNORATE_REQUIRED' | translate }}
+  </small>
+</div>
+
+          <!-- Area -->
+          <div class="field">
+            <label for="area">
+              {{ 'ADD_SERVICE.CITY_AREA' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="area"
+              type="text"
+              name="area"
+              [(ngModel)]="createProvider.area"
+              [placeholder]="'ADD_SERVICE.AREA_PLACEHOLDER' | translate"
+              required
+              #area="ngModel">
+
+            <small
+              class="error"
+              *ngIf="area.invalid && area.touched">
+              {{ 'ADD_SERVICE.AREA_REQUIRED' | translate }}
+            </small>
+          </div>
+
+          <!-- Full Address -->
+          <div class="field full-width">
+            <label for="address">
+              {{ 'ADD_SERVICE.FULL_ADDRESS' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="address"
+              type="text"
+              name="address"
+              [(ngModel)]="createProvider.address"
+              [placeholder]="'ADD_SERVICE.ADDRESS_PLACEHOLDER' | translate"
+              autocomplete="street-address"
+              required
+              #address="ngModel">
+
+            <small
+              class="error"
+              *ngIf="address.invalid && address.touched">
+              {{ 'ADD_SERVICE.ADDRESS_REQUIRED' | translate }}
+            </small>
+          </div>
+
+        </div>
+
+        <!-- Optional Coordinates -->
+        <div class="coordinates-box">
+          <div class="coordinates-heading">
+            <span class="coordinates-icon">
+              <i class="bi bi-geo-alt"></i>
+            </span>
+
+            <div>
+              <h3>{{ 'ADD_SERVICE.MAP_COORDINATES' | translate }}</h3>
+              <p>{{ 'ADD_SERVICE.COORDINATES_DESCRIPTION' | translate }}</p>
+            </div>
+
+            <span class="optional-badge">
+              {{ 'ADD_SERVICE.OPTIONAL' | translate }}
+            </span>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="latitude">
+                {{ 'ADD_SERVICE.LATITUDE' | translate }}
+              </label>
+
+              <input
+                id="latitude"
+                type="number"
+                name="latitude"
+                [(ngModel)]="createProvider.latitude"
+                [placeholder]="'ADD_SERVICE.LATITUDE_PLACEHOLDER' | translate"
+                min="-90"
+                max="90"
+                step="any">
+            </div>
+
+            <div class="field">
+              <label for="longitude">
+                {{ 'ADD_SERVICE.LONGITUDE' | translate }}
+              </label>
+
+              <input
+                id="longitude"
+                type="number"
+                name="longitude"
+                [(ngModel)]="createProvider.longitude"
+                [placeholder]="'ADD_SERVICE.LONGITUDE_PLACEHOLDER' | translate"
+                min="-180"
+                max="180"
+                step="any">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- 03 Service Information -->
+      <section class="form-section">
+        <div class="section-heading">
+          <span class="section-number">03</span>
+
+          <div class="section-title">
+            <h2>{{ 'ADD_SERVICE.SERVICE_INFORMATION' | translate }}</h2>
+            <p>{{ 'ADD_SERVICE.SERVICE_DESCRIPTION' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Starting Price -->
+          <div class="field">
+            <label for="startingPrice">
+              {{ 'ADD_SERVICE.STARTING_PRICE' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <div class="price-input">
+              <span class="currency">
+                {{ 'ADD_SERVICE.CURRENCY' | translate }}
+              </span>
+
+              <input
+                id="startingPrice"
+                type="number"
+                name="startingPrice"
+                [(ngModel)]="createProvider.startingPrice"
+                [placeholder]="'ADD_SERVICE.PRICE_PLACEHOLDER' | translate"
+                min="0"
+                step="0.01"
+                required
+                #startingPrice="ngModel">
+            </div>
+
+            <small class="field-hint">
+              {{ 'ADD_SERVICE.PRICE_HINT' | translate }}
+            </small>
+
+            <small
+              class="error"
+              *ngIf="startingPrice.invalid && startingPrice.touched">
+              {{ 'ADD_SERVICE.PRICE_REQUIRED' | translate }}
+            </small>
+          </div>
+
+          <!-- Category -->
+          <div class="field">
+            <label for="categoryId">
+              {{ 'ADD_SERVICE.SERVICE_CATEGORY' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <select
+              id="categoryId"
+              name="categoryId"
+              [(ngModel)]="createProvider.categoryId"
+              #categoryId="ngModel">
+
+              <option [ngValue]="null" disabled>
+                {{ 'ADD_SERVICE.SELECT_CATEGORY' | translate }}
+              </option>
+
+              <option
+                *ngFor="let category of categories"
+                [ngValue]="category.id">
+                {{ category.name }}
+              </option>
+
+              <option [ngValue]="-1">
+                {{ 'ADD_SERVICE.CATEGORY_NOT_LISTED' | translate }}
+              </option>
+
+            </select>
+
+            <small
+              class="error"
+              *ngIf="categoryId.invalid && categoryId.touched">
+              {{ 'ADD_SERVICE.CATEGORY_REQUIRED' | translate }}
+            </small>
+          </div>
+
+          <!-- New Category -->
+          <div
+            class="field full-width new-category-field"
+            *ngIf="createProvider.categoryId != null &&
+                   createProvider.categoryId < 0">
+
+            <label for="newCategoryName">
+              {{ 'ADD_SERVICE.NEW_CATEGORY' | translate }}
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="newCategoryName"
+              type="text"
+              name="newCategoryName"
+              [(ngModel)]="newCategoryName"
+              [placeholder]="'ADD_SERVICE.NEW_CATEGORY_PLACEHOLDER' | translate"
+              required
+              #newCategory="ngModel">
+
+            <small
+              class="error"
+              *ngIf="newCategory.invalid && newCategory.touched">
+              {{ 'ADD_SERVICE.NEW_CATEGORY_REQUIRED' | translate }}
+            </small>
+
+            <small class="field-hint">
+              {{ 'ADD_SERVICE.NEW_CATEGORY_HINT' | translate }}
+            </small>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="providerForm.invalid">
+
+          <i class="bi bi-check2-circle"></i>
+          {{ 'ADD_SERVICE.SUBMIT_SERVICE' | translate }}
+          <i class="bi bi-arrow-right submit-arrow"></i>
+        </button>
+
+        <button
+          type="reset"
+          class="btn-reset"
+          (click)="providerForm.resetForm()">
+
+          <i class="bi bi-arrow-counterclockwise"></i>
+          {{ 'ADD_SERVICE.CLEAR_FORM' | translate }}
+        </button>
+      </div>
+
+      <!-- Note -->
+      <div class="form-note">
+        <i class="bi bi-shield-check"></i>
+
+        <p>
+          {{ 'ADD_SERVICE.SUBMISSION_NOTE' | translate }}
+        </p>
+      </div>
+
+    </form>
+  </div>
+</main>

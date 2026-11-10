@@ -1,0 +1,37 @@
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# .NET build files
+**/bin/
+**/obj/
+
+# Angular dependencies
+**/node_modules/
+
+# Angular build output
+**/dist/
+**/.angular/
+
+# Logs
+*.log
+
+# Sensitive configuration
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Production.json
+
+# Environment files
+**/.env
+**/.env.*
+
+# Duplicate Angular project inside Backend
+Fltrni/angular-Fltrni/
+
+# Database dump - review before publishing
+Fltrni/fltrni-database.sql
+
+# Visual Studio Publish Profiles
+**/Properties/PublishProfiles/

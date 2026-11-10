@@ -1,0 +1,377 @@
+
+<main class="details-page">
+  <div class="details-container">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb-text" aria-label="Breadcrumb">
+      <a routerLink="/serviceprovider">
+        {{ 'DETAILS.SERVICE_PROVIDERS' | translate }}
+      </a>
+      <span>/</span>
+      <span>{{ 'DETAILS.PROVIDER_DETAILS' | translate }}</span>
+    </nav>
+
+    <!-- PROVIDER DETAILS -->
+    <section class="provider-card" *ngIf="provider; else providerMissing">
+
+      <!-- Provider Header -->
+      <div class="provider-header">
+
+        <div class="provider-avatar">
+          {{ (provider.name || 'P').charAt(0) | uppercase }}
+        </div>
+
+        <div class="provider-heading">
+          <span class="provider-category">
+            {{ provider.categoryName || ('DETAILS.PROFESSIONAL_SERVICE' | translate) }}
+          </span>
+
+          <h1>{{ provider.name }}</h1>
+
+          <div class="provider-rating">
+            <span class="rating-star">★</span>
+            <strong>{{ provider.rating || 0 }}</strong>
+            <span class="rating-divider">·</span>
+            <span>
+              {{ provider.reviewsCount || 0 }}
+              {{ 'DETAILS.REVIEWS' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <div class="availability-badge">
+          <span class="status-dot"></span>
+          {{ 'DETAILS.PROFESSIONAL' | translate }}
+        </div>
+
+      </div>
+
+      <div class="provider-divider"></div>
+
+      <!-- Provider Information -->
+      <div class="provider-info-grid">
+
+        <div class="info-item">
+          <span class="info-icon">📍</span>
+          <div>
+            <span class="info-label">
+              {{ 'DETAILS.GOVERNORATE' | translate }}
+            </span>
+            <strong>
+              {{ provider.governorate || ('DETAILS.NOT_SPECIFIED' | translate) }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">⌖</span>
+          <div>
+            <span class="info-label">
+              {{ 'DETAILS.AREA' | translate }}
+            </span>
+            <strong>
+              {{ provider.area || ('DETAILS.NOT_SPECIFIED' | translate) }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">☎</span>
+          <div>
+            <span class="info-label">
+              {{ 'DETAILS.PHONE_NUMBER' | translate }}
+            </span>
+            <strong>
+              {{ provider.phone || ('DETAILS.NOT_PROVIDED' | translate) }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="info-icon">✉</span>
+          <div>
+            <span class="info-label">
+              {{ 'DETAILS.EMAIL_ADDRESS' | translate }}
+            </span>
+            <strong class="info-value">
+              {{ provider.email || ('DETAILS.NOT_PROVIDED' | translate) }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="info-item address-item">
+          <span class="info-icon">⌂</span>
+          <div>
+            <span class="info-label">
+              {{ 'DETAILS.FULL_ADDRESS' | translate }}
+            </span>
+            <strong>
+              {{ provider.address || ('DETAILS.ADDRESS_NOT_PROVIDED' | translate) }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="info-item price-item">
+          <span class="info-icon">₤</span>
+          <div>
+            <span class="info-label">
+              {{ 'DETAILS.STARTING_PRICE' | translate }}
+            </span>
+            <strong class="starting-price">
+              {{ provider.startingPrice }} {{ 'DETAILS.CURRENCY' | translate }}
+            </strong>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Provider Actions -->
+      <div class="provider-actions">
+
+        <a
+          *ngIf="provider.phone"
+          [href]="'tel:' + provider.phone"
+          class="call-provider-btn">
+          <span class="action-icon">☎</span>
+          {{ 'DETAILS.CALL_PROVIDER' | translate }}
+        </a>
+
+        <a
+          *ngIf="provider.googleMapsUrl"
+          [href]="provider.googleMapsUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="view-location-btn">
+          <span class="action-icon">📍</span>
+          {{ 'DETAILS.VIEW_LOCATION' | translate }}
+        </a>
+
+        <a
+          *ngIf="
+            !provider.googleMapsUrl &&
+            provider.latitude != null &&
+            provider.longitude != null
+          "
+          [href]="'https://www.google.com/maps?q=' +
+            provider.latitude + ',' + provider.longitude"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="view-location-btn">
+          <span class="action-icon">📍</span>
+          {{ 'DETAILS.VIEW_LOCATION' | translate }}
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- PROVIDER NOT FOUND -->
+    <ng-template #providerMissing>
+      <section class="provider-not-found">
+        <div class="not-found-icon">!</div>
+
+        <h2>{{ 'DETAILS.PROVIDER_NOT_FOUND' | translate }}</h2>
+
+        <p>
+          {{ 'DETAILS.PROVIDER_NOT_FOUND_MESSAGE' | translate }}
+        </p>
+
+        <a routerLink="/serviceprovider" class="back-to-providers">
+          {{ 'DETAILS.BACK_TO_PROVIDERS' | translate }}
+        </a>
+      </section>
+    </ng-template>
+
+    <!-- REVIEWS + ADD REVIEW -->
+    <section class="reviews-layout" *ngIf="provider">
+
+      <!-- LEFT: REVIEWS -->
+      <div class="reviews-section">
+
+        <div class="reviews-heading">
+
+          <div class="heading-content">
+            <span class="section-kicker">
+              {{ 'DETAILS.CUSTOMER_FEEDBACK' | translate }}
+            </span>
+
+            <h2>{{ 'DETAILS.REVIEWS_RATINGS' | translate }}</h2>
+
+            <p>{{ 'DETAILS.REAL_EXPERIENCES' | translate }}</p>
+          </div>
+
+          <div class="review-count">
+            <span class="count-star">★</span>
+            <div>
+              <strong>{{ reviews.length }}</strong>
+              <small>
+                {{
+                  (reviews.length === 1
+                    ? 'DETAILS.REVIEW'
+                    : 'DETAILS.REVIEWS') | translate
+                }}
+              </small>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Reviews List -->
+        <div
+          class="reviews-list"
+          *ngIf="reviews.length > 0; else emptyReviews">
+
+          <article class="review-card" *ngFor="let item of reviews">
+
+            <div class="review-top">
+
+              <div class="review-avatar">C</div>
+
+              <div class="review-meta">
+                <strong>{{ 'DETAILS.CUSTOMER' | translate }}</strong>
+                <span class="review-date">
+                  {{ item.created | date:'mediumDate' }}
+                </span>
+              </div>
+
+              <div class="review-rating">
+                <span>★</span>
+                {{ item.rating }}/5
+              </div>
+
+            </div>
+
+            <div class="review-divider"></div>
+
+            <p class="review-comment">{{ item.comment }}</p>
+
+          </article>
+
+        </div>
+
+        <!-- Empty Reviews -->
+        <ng-template #emptyReviews>
+          <div class="empty-reviews">
+            <div class="empty-icon">★</div>
+
+            <h3>{{ 'DETAILS.NO_REVIEWS' | translate }}</h3>
+
+            <p>{{ 'DETAILS.FIRST_REVIEW' | translate }}</p>
+          </div>
+        </ng-template>
+
+      </div>
+
+      <!-- RIGHT: ADD REVIEW -->
+      <aside class="add-review-section">
+
+        <div class="form-heading">
+
+          <div class="form-heading-icon">✎</div>
+
+          <div>
+            <span class="section-kicker">
+              {{ 'DETAILS.FEEDBACK_MATTERS' | translate }}
+            </span>
+
+            <h2>{{ 'DETAILS.WRITE_REVIEW' | translate }}</h2>
+
+            <p>{{ 'DETAILS.HELP_OTHERS' | translate }}</p>
+          </div>
+
+        </div>
+
+        <form
+          (ngSubmit)="createReview()"
+          #reviewForm="ngForm"
+          class="review-form">
+
+          <!-- Rating -->
+          <div class="form-group">
+
+            <label for="rating">
+              {{ 'DETAILS.YOUR_RATING' | translate }}
+            </label>
+
+            <select
+              id="rating"
+              name="rating"
+              class="form-control"
+              [(ngModel)]="review.rating"
+              required>
+
+              <option [ngValue]="5">
+                ★★★★★ — {{ 'DETAILS.EXCELLENT' | translate }}
+              </option>
+
+              <option [ngValue]="4">
+                ★★★★☆ — {{ 'DETAILS.VERY_GOOD' | translate }}
+              </option>
+
+              <option [ngValue]="3">
+                ★★★☆☆ — {{ 'DETAILS.GOOD' | translate }}
+              </option>
+
+              <option [ngValue]="2">
+                ★★☆☆☆ — {{ 'DETAILS.FAIR' | translate }}
+              </option>
+
+              <option [ngValue]="1">
+                ★☆☆☆☆ — {{ 'DETAILS.POOR' | translate }}
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- Comment -->
+          <div class="form-group">
+
+            <label for="comment">
+              {{ 'DETAILS.YOUR_COMMENTS' | translate }}
+            </label>
+
+            <textarea
+              id="comment"
+              name="comment"
+              class="form-control review-textarea"
+              [(ngModel)]="review.comment"
+              [placeholder]="'DETAILS.COMMENT_PLACEHOLDER' | translate"
+              rows="4"
+              required
+              minlength="3"
+              maxlength="1000"></textarea>
+
+            <div class="field-footer">
+              <small>
+                {{ 'DETAILS.HONEST_EXPERIENCE' | translate }}
+              </small>
+
+              <small>{{ review.comment.length || 0 }}/1000</small>
+            </div>
+
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="btn-submit"
+            [disabled]="reviewForm.invalid">
+
+            <span>{{ 'DETAILS.SUBMIT_REVIEW' | translate }}</span>
+            <span class="submit-arrow">→</span>
+
+          </button>
+
+          <p class="form-note">
+            ★ {{ 'DETAILS.FEEDBACK_COMMUNITY' | translate }}
+          </p>
+
+        </form>
+
+      </aside>
+
+    </section>
+
+  </div>
+</main>

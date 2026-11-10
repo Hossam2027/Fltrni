@@ -1,0 +1,83 @@
+ <div class="login-page">
+  <div class="login-card">
+
+    <a class="brand" routerLink="/">
+      <span class="brand-icon">F</span>
+      <span>Fltrni<span class="brand-dot">.</span></span>
+    </a>
+
+    <div class="login-heading">
+      <h1>Welcome Back</h1>
+      <p>Log in to your account to continue</p>
+    </div>
+
+    <form [formGroup]="loginform" (ngSubmit)="login()" novalidate>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email address"
+          autocomplete="email"
+         />
+
+        <div class="error-message"
+             *ngIf="loginform.get('email')?.touched &&
+                    loginform.get('email')?.invalid">
+
+          <small *ngIf="loginform.get('email')?.errors?.['required']">
+            Email is required.
+          </small>
+
+          <small *ngIf="loginform.get('email')?.errors?.['email']">
+            Enter a valid email address.
+          </small>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          [class.input-error]="
+            loginform.get('password')?.touched &&
+            loginform.get('password')?.invalid
+          " />
+
+        <div class="error-message"
+             *ngIf="loginform.get('password')?.touched &&
+                    loginform.get('password')?.errors?.['required']">
+          <small>Password is required.</small>
+        </div>
+      </div>
+
+      <!-- Server error: connect this to your existing error property -->
+      
+
+      <button
+    type="submit"
+    class="login-button"
+    [disabled]="">
+
+    <span >Login</span>
+  </button>
+
+    </form>
+
+    <div class="register-link">
+      <span>Don't have an account?</span>
+      <a routerLink="/register">Register</a>
+    </div>
+
+  </div>
+</div>

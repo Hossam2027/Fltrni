@@ -1,0 +1,97 @@
+
+<div class="status-page">
+  <div class="status-card">
+
+    <h2>حالة طلب مزود الخدمة</h2>
+
+    <p class="subtitle">
+      تابع حالة طلبك على منصة Fltrni.
+    </p>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="status-message">
+      <div class="status-icon">⏳</div>
+      <p>جاري تحميل حالة طلبك...</p>
+    </div>
+
+    <!-- Error -->
+    <div
+      *ngIf="!loading && errorMessage"
+      class="status-message rejected">
+
+      <div class="status-icon">!</div>
+      <h3>تعذر تحميل الحالة</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <!-- Application Status -->
+    <ng-container *ngIf="!loading && !errorMessage">
+
+      <!-- Pending: status = 0 -->
+      <div
+        *ngIf="myStatus && myStatus.status === 0"
+        class="status-message pending">
+
+        <div class="status-icon">⏳</div>
+        <h3>طلبك قيد المراجعة</h3>
+
+        <p>
+          استلمنا طلبك، والأدمن بيراجع بياناتك حاليًا.
+        </p>
+
+        <p *ngIf="myStatus.id">
+          رقم الطلب: {{ myStatus.id }}
+        </p>
+      </div>
+
+      <!-- Approved: status = 1 -->
+      <div
+        *ngIf="myStatus && myStatus.status === 1"
+        class="status-message approved">
+
+        <div class="status-icon">✓</div>
+        <h3>تم قبول طلبك!</h3>
+
+        <p>
+          مبروك! تم قبولك كمزود خدمة على Fltrni.
+        </p>
+      </div>
+
+      <!-- Rejected: status = 2 -->
+      <div
+        *ngIf="myStatus && myStatus.status === 2"
+        class="status-message rejected">
+
+        <div class="status-icon">✕</div>
+        <h3>تم رفض الطلب</h3>
+
+        <p>
+          للأسف، لم تتم الموافقة على طلبك.
+          يمكنك التواصل مع الإدارة لمعرفة التفاصيل.
+        </p>
+      </div>
+
+      <!-- No Application -->
+      <div
+        *ngIf="myStatus === null"
+        class="no-request">
+
+        <div class="status-icon">📋</div>
+        <h3>لم تقدم طلبًا بعد</h3>
+
+        <p>
+          قدّم طلبك لتبدأ رحلتك كمزود خدمة على Fltrni.
+        </p>
+
+        <a
+          routerLink="/addserviceprovider"
+          class="apply-button">
+
+          تقديم طلب مزود خدمة
+        </a>
+      </div>
+
+    </ng-container>
+
+  </div>
+</div>

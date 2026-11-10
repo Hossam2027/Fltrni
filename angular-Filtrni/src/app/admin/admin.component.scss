@@ -1,0 +1,171 @@
+
+.admin-page {
+  min-height: 75vh;
+  color: #17243b;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-label {
+  color: #4775e5;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.admin-header h1 {
+  margin: 8px 0;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 800;
+}
+
+.admin-header p,
+.provider-details p {
+  color: #68758a;
+}
+
+.pending-count {
+  min-width: 130px;
+  padding: 18px;
+  border: 1px solid #e4eaf2;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.pending-count span,
+.pending-count small {
+  display: block;
+}
+
+.pending-count span {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.pending-count small {
+  color: #68758a;
+}
+
+.provider-list {
+  display: grid;
+  gap: 16px;
+}
+
+.provider-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #e4eaf2;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgb(20 40 80 / 4%);
+}
+
+.provider-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.provider-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: #eaf0ff;
+  color: #315bd5;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.provider-details h3 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.provider-details p {
+  margin-bottom: 6px;
+}
+
+.provider-meta {
+  color: #68758a;
+  font-size: 14px;
+}
+
+.provider-price {
+  margin-top: 10px;
+}
+
+.provider-price strong {
+  color: #17243b;
+}
+
+.provider-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-approve,
+.btn-reject {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-approve {
+  background: #176b48;
+  color: #fff;
+}
+
+.btn-reject {
+  background: #fff0f0;
+  color: #b42332;
+}
+
+.btn-approve:disabled,
+.btn-reject:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading-state,
+.empty-state {
+  padding: 50px 20px;
+  text-align: center;
+  color: #68758a;
+  border: 1px dashed #d5deeb;
+  border-radius: 18px;
+}
+
+.empty-state h3 {
+  color: #17243b;
+}
+
+@media (max-width: 650px) {
+  .provider-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .provider-actions {
+    width: 100%;
+  }
+
+  .provider-actions button {
+    flex: 1;
+  }
+}
