@@ -38,6 +38,7 @@ namespace Fltrni.API.Controllers
 
             return Ok(providers);
         }
+
         [HttpPost]
         [Authorize(Roles = "Customer,Provider,Admin")]
         public async Task<IActionResult> Create(CreateServiceProviderDto dto)
@@ -48,6 +49,7 @@ namespace Fltrni.API.Controllers
 
             return Ok(new { message = "Service provider created successfully" });
         }
+
         [Authorize]
         [Authorize(Roles = "Admin")]
         [HttpPut("approve/{id}")]
@@ -57,6 +59,7 @@ namespace Fltrni.API.Controllers
 
             return Ok(result);
         }
+
         [Authorize]
         [Authorize(Roles = "Admin")]
         [HttpPut("reject/{id}")]
@@ -66,6 +69,7 @@ namespace Fltrni.API.Controllers
 
             return Ok(result);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -75,6 +79,7 @@ namespace Fltrni.API.Controllers
             return Ok(result);
         }
         [HttpGet("{id}")]
+
         public async Task<IActionResult> GetById(int id)
         {
             var provider = await _serviceProviderService.GetserviceProviderByIdAsync(id);
@@ -86,6 +91,8 @@ namespace Fltrni.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Update(int id, UpdateServiceProviderDto dto)
         {
             await _serviceProviderService.UpdateAsync(id, dto);

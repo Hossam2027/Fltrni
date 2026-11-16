@@ -12,12 +12,11 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+// Add Controllers
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//add Cors angular
 
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -44,7 +43,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "CRUD API",
+        Title = "Faltrni API",
         Version = "v1"
     });
 
@@ -81,8 +80,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.TokenValidationParameters =
-            new TokenValidationParameters
+    options.TokenValidationParameters =new TokenValidationParameters
             {
                 ValidateIssuer = true,
 
@@ -99,9 +97,7 @@ builder.Services.AddAuthentication(options =>
                 ValidateIssuerSigningKey = true,
 
                 IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(
-                            builder.Configuration["Jwt:Key"]
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
                             ?? throw new InvalidOperationException(
                                 "JWT Key is missing"
                             )
@@ -112,28 +108,13 @@ builder.Services.AddAuthentication(options =>
             };
 });
 
-
-//add cosr for runasp
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAngular", policy =>
-//    {
-//        policy
-//            .WithOrigins("https://faltrni.runasp.net")
-//            .AllowAnyHeader()
-//            .AllowAnyMethod();
-//    });
-//});
-
 // add cosr for localhost
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
         policy
-            .WithOrigins("http://localhost:4200")
+            .WithOrigins("http://localhost:4200,https://faltrni.runasp.net")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -142,17 +123,14 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 // Add GlobalExceptionMiddleware
 //app.UseMiddleware<GlobalExceptionMiddleware>();
+
 // use Cors
-
-
-
 app.UseCors("AllowAngular");
 
 // Roles seeding
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider
-        .GetRequiredService<RoleManager<IdentityRole>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     string[] roles = { "Admin", "Provider", "Customer" };
 
@@ -165,10 +143,29 @@ using (var scope = app.Services.CreateScope())
     }
 }
 // Seed admin user
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    string adminEmail = "urmail@gmaill.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        var newAdminUser = new AppUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            DisplayName = "Admin"
+        };
+        var result = await userManager.CreateAsync(newAdminUser, "ur password");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newAdminUser, "Admin");
+        }
+    }
+}
 
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

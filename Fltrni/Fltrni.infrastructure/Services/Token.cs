@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -27,7 +28,7 @@ namespace Fltrni.infrastructure.Services
             //  إنشاء قائمة Claims
             var claims = new List<Claim>
             {
-             new Claim(ClaimTypes.NameIdentifier, appUser.Id),
+               new Claim(ClaimTypes.NameIdentifier, appUser.Id),
                 new Claim(ClaimTypes.Name, appUser.UserName),
                 new Claim(ClaimTypes.Email, appUser.Email)
             };
@@ -45,12 +46,9 @@ namespace Fltrni.infrastructure.Services
                 );
             }
             // 4. إنشاء SigningCredentials
-            var credentials = new SigningCredentials(
-             key,
-             SecurityAlgorithms.HmacSha256
-         );
+            var credentials = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
             // 5. إنشاء Token
-            var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
+            var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:Issuer"],
                 audience: _configuration["JWT:Audience"],
                 claims: claims,
@@ -58,7 +56,7 @@ namespace Fltrni.infrastructure.Services
                 signingCredentials: credentials
             );
             // 6. تحويل Token إلى سلسلة نصية
-            var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
         }
     }

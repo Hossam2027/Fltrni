@@ -132,31 +132,41 @@ namespace Fltrni.infrastructure.Repository
 
             await UnitOfWork.CompleteAsync();
         }
-
         public async Task<string> ApproveAsync(int id)
         {
-            var provider = await UnitOfWork.Repository<ServiceProvider>().GetByIdAsync(id);
-            if (provider is null) return ("Provider not found");
+            var provider = await UnitOfWork.Repository<ServiceProvider>()
+                .GetByIdAsync(id);
 
+            if (provider is null)
+                return "Provider not found";
 
-            provider.Status = ProviderStatus.Approved;
-            UnitOfWork.Repository<ServiceProvider>().Update(provider);
-            await UnitOfWork.CompleteAsync();
-            if (!string.IsNullOrEmpty(provider.UserId))
+            if (string.IsNullOrEmpty(provider.UserId))
+                return "Provider not associated with a User";
+
+            var user = await UserManager.FindByIdAsync(provider.UserId);
+
+            if (user is null)
+                return "User not found";
+
+            var isProvider = await UserManager.IsInRoleAsync(user, "Provider");
+
+            if (!isProvider)
             {
-                var user = await UserManager.FindByIdAsync(provider.UserId);
+                var result = await UserManager.AddToRoleAsync(user, "Provider");
 
-                if (user is not null)
+                if (!result.Succeeded)
                 {
-                    var isProvider = await UserManager.IsInRoleAsync(user, "Provider");
-
-                    if (!isProvider)
-                    {
-                        await UserManager.AddToRoleAsync(user, "Provider");
-                    }
+                    return string.Join(", ", result.Errors.Select(e => e.Description));
                 }
             }
-            return ("Service Provider approved successfully");
+
+            provider.Status = ProviderStatus.Approved;
+
+            UnitOfWork.Repository<ServiceProvider>().Update(provider);
+
+            await UnitOfWork.CompleteAsync();
+
+            return "Service Provider approved successfully";
         }
 
         public async Task<string> RejectAsync(int id)

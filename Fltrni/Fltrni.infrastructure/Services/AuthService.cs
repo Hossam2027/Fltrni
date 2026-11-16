@@ -66,8 +66,7 @@ namespace Fltrni.infrastructure.Services
             }
             var roles = await UserManager.GetRolesAsync(user);
             var token = await Token.CreateTokenAsync(user);
-            return new { message = "Login successful" , token = token , roles,userName = user.DisplayName
-            }; 
+            return new { message = "Login successful" , token = token , roles,userName = user.DisplayName}; 
 
         }
 
